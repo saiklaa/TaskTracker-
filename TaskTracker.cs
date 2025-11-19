@@ -7,7 +7,7 @@ using System.Data;
 using System.Numerics;
 using System.ComponentModel.DataAnnotations;
 
-namespace MyApp
+namespace TaskTracker
 {
     public enum TaskStatus
     { ToDO, InProgress, Done };
