@@ -14,6 +14,11 @@ namespace TaskTracker
         public string? Description { get; set; }
         public TaskStatus taskStatus { get; set; } = TaskStatus.ToDO;
         public DateTime creationDate { get; set; } = DateTime.Now;
+
+        public override string ToString()
+        {
+            return $"{Title} [{taskStatus}]";
+        }
     }
 
     public class TaskBoard
