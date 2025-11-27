@@ -52,6 +52,11 @@ namespace TaskTracker
         {
             Console.Write("Title: ");
             var title = Console.ReadLine();
+            if(string.IsNullOrWhiteSpace(title))
+            {
+                Console.WriteLine("Title cannot be empty.");
+                return;
+            }
             Console.Write("Description: ");
             var description = Console.ReadLine();
             var task = new TaskItem
