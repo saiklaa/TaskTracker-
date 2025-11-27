@@ -103,13 +103,13 @@ public class TaskApp
     {
         try
         {
-        Console.Write("Status(ToDo, InProgress, Done): ");
-        if (Enum.TryParse<TaskStatus>(Console.ReadLine(), true, out var status))
-        {
-            var tasks = _board.GetTasksByStatus(status);
-            tasks.ForEach(t => Console.WriteLine($"{t.Id} - {t}"));
-        }
-        else Console.WriteLine("Invalid Status.");
+            Console.Write("Status(ToDo, InProgress, Done): ");
+            if (Enum.TryParse<TaskStatus>(Console.ReadLine(), true, out var status))
+            {
+                var tasks = _board.GetTasksByStatus(status);
+                tasks.ForEach(t => Console.WriteLine($"{t.Id} - {t}"));
+            }
+            else Console.WriteLine("Invalid Status.");
         }
         catch (Exception ex)
         {
