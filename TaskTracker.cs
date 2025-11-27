@@ -5,19 +5,20 @@ using System.Linq;
 namespace TaskTracker
 {
     public enum TaskStatus
-    { ToDO, InProgress, Done };
+    { ToDo, InProgress, Done }
 
     public class TaskItem
     {
-        public Guid Id{ get; } = Guid.NewGuid();
-        public required string Title { get; set; } = string.Empty;
+        public Guid Id { get; } = Guid.NewGuid();
+
+        public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public TaskStatus taskStatus { get; set; } = TaskStatus.ToDO;
-        public DateTime creationDate { get; set; } = DateTime.Now;
+        public TaskStatus Status { get; set; } = TaskStatus.ToDo;
+        public DateTime CreationDate { get; set; } = DateTime.Now;
 
         public override string ToString()
         {
-            return $"{Title} [{taskStatus}]";
+            return $"{Title} [{Status}]";
         }
     }
 
@@ -25,15 +26,15 @@ namespace TaskTracker
     {
         private readonly List<TaskItem> _tasks = new();
         public void AddTask(TaskItem task) => _tasks.Add(task);
-        public List<TaskItem> GetTasks() => _tasks;
-        public List<TaskItem> GetTasksByStatus(TaskStatus status) => _tasks.Where(t => t.taskStatus == status).ToList();
+        public List<TaskItem> GetTasks() => _tasks.ToList();
+        public List<TaskItem> GetTasksByStatus(TaskStatus status) => _tasks.Where(t => t.Status == status).ToList();
         public TaskItem? GetTaskById(Guid id) => _tasks.FirstOrDefault(t => t.Id == id);
         public bool RemoveTask(Guid id) => _tasks.RemoveAll(t => t.Id == id) > 0;
     }
     
     public class TaskApp
     {
-        private readonly TaskBoard board = new();
+        private readonly TaskBoard _board = new();
 
         public void Run()
         {
@@ -66,16 +67,16 @@ namespace TaskTracker
             var description = Console.ReadLine();
             var task = new TaskItem
             {
-                Title = title!,
-                Description = description
+                Title = title.Trim(),
+                Description = description?.Trim()
             };
-            board.AddTask(task);
+            _board.AddTask(task);
             Console.WriteLine("Task added.");
         }
         private void ViewTasks()
         {
-            var tasks = board.GetTasks();
-            if(!tasks.Any()) Console.WriteLine("No tasks");
+            var tasks = _board.GetTasks();
+            if(!tasks.Any()) Console.WriteLine("No Tasks");
             else tasks.ForEach(t => Console.WriteLine($"{t.Id} - {t}"));
         }
 
@@ -83,14 +84,14 @@ namespace TaskTracker
         {
             Console.WriteLine("Enter task ID: ");
             if(Guid.TryParse(Console.ReadLine(), out var id)){
-                var task = board.GetTaskById(id);
+                var task = _board.GetTaskById(id);
                 if(task == null) Console.WriteLine("Task not found.");
                 else
                 {
                     Console.WriteLine("Set new status (ToDo, InProgress, Done):");
-                    if(Enum.TryParse<TaskStatus>(Console.ReadLine(), out var newStatus))
+                    if(Enum.TryParse<TaskStatus>(Console.ReadLine(),true, out var newStatus))
                     {
-                        task.taskStatus = newStatus;
+                        task.Status = newStatus;
                         Console.WriteLine("Status updated");
                     }
                     else Console.WriteLine("Invalid status.");
@@ -103,9 +104,9 @@ namespace TaskTracker
         private void Filter()
         {
             Console.Write("Status(ToDo, InProgress, Done): ");
-            if (Enum.TryParse<TaskStatus>(Console.ReadLine (), out var status))
+            if (Enum.TryParse<TaskStatus>(Console.ReadLine (), true, out var status))
             {
-                var tasks = board.GetTasksByStatus(status);
+                var tasks = _board.GetTasksByStatus(status);
                 tasks.ForEach ( t => Console.WriteLine($"{t.Id} - {t}"));
             }
             else Console.WriteLine("Invalid Status.");
@@ -116,7 +117,7 @@ namespace TaskTracker
             Console.Write("Enter task id to delete: ");
             if(Guid.TryParse(Console.ReadLine(), out var id))
             {
-                if (board.RemoveTask(id)) Console.WriteLine("Deleted.");
+                if (_board.RemoveTask(id)) Console.WriteLine("Deleted.");
                 else Console.WriteLine("Task not found.");
             }
             else Console.WriteLine("Invalid ID.");
