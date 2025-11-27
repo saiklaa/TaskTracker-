@@ -14,6 +14,11 @@ namespace TaskTracker
         public string? Description { get; set; }
         public TaskStatus taskStatus { get; set; } = TaskStatus.ToDO;
         public DateTime creationDate { get; set; } = DateTime.Now;
+
+        public override string ToString()
+        {
+            return $"{Title} [{taskStatus}]";
+        }
     }
 
     public class TaskBoard
@@ -52,6 +57,11 @@ namespace TaskTracker
         {
             Console.Write("Title: ");
             var title = Console.ReadLine();
+            if(string.IsNullOrWhiteSpace(title))
+            {
+                Console.WriteLine("Title cannot be empty.");
+                return;
+            }
             Console.Write("Description: ");
             var description = Console.ReadLine();
             var task = new TaskItem
