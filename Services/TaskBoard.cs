@@ -5,6 +5,7 @@ namespace TaskTracker.Services;
 public class TaskBoard
 {
     private readonly List<TaskItem> _tasks = new();
+    private readonly string _filePath = "tasks.json";
     
     public void AddTask(TaskItem task) => _tasks.Add(task);
     public List<TaskItem> GetTasks() => _tasks.ToList();

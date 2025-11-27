@@ -4,7 +4,14 @@ class Program
 {
     static void Main()
     {
-        var app = new TaskApp();
-        app.Run();
+        try
+        {
+            var app = new TaskApp();
+            app.Run();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
     }
 }
